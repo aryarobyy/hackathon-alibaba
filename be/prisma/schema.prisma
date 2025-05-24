@@ -22,6 +22,24 @@ model Chat {
   message String
   creatorId String @default("not-authored")
   reply String?
+  mood  String
+  recomendation String?
+  reason String?
 
   creator User @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+}
+
+model Food {
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  name                String
+  description         String
+  mood                String
+  reason              String
+  ingredients         String
+  difficulty          String
+  prepTime            String
+  tags                String[]
+  nutritionalBenefits String
+  availability        String
+  priceRange          String
 }

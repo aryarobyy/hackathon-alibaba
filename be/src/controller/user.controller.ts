@@ -9,7 +9,6 @@ const isValidEmail = (email: string): boolean => {
   return emailRegex.test(email);
 };
 
-
 export const registerUser = async (
     req: Request,
     res: Response,
@@ -21,6 +20,15 @@ export const registerUser = async (
 
         if (!isValidEmail(email)) {
             errorRes(res, 400, "Format email tidak valid");
+            return;
+        }
+
+        const existingUser = await prisma.user.findUnique({
+            where: { email }
+        });
+
+        if (existingUser) {
+            errorRes(res, 409, 'Email sudah terdaftar');
             return;
         }
 

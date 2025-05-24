@@ -5,7 +5,8 @@ import chatRoute from './routes/chat.route';
 import userRoute from './routes/user.route';
 // import { insertManyData } from './controller/insert.many';
 import cors from 'cors';
-import { getFoodByMood } from './controller/food.controller';
+import { getDetailFood, getFoodByMood } from './controller/food.controller';
+import { getRekomenFood } from './controller/mood.controller';
 
 dotenv.config();
 
@@ -19,8 +20,6 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-// insertManyData();
-
 app.use(
   cors({
     origin: 'http://localhost:5173',
@@ -29,10 +28,11 @@ app.use(
   })
 );
 
-// insertManyData();
 app.use('/chat', chatRoute)
 app.use('/user', userRoute)
-app.use('/food', getFoodByMood)
+app.get('/food/:mood', getFoodByMood)
+app.post('/food', getDetailFood)
+app.get('/mood/:mood', getRekomenFood)
 
 httpServer.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

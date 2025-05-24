@@ -10,8 +10,9 @@ export const getFoodByMood = async (
     try {
         const { mood } = req.params;
 
+        const moods = toTitleCase(mood)
         const data = await prisma.food.findFirst({
-        where: { mood },
+        where: { mood: moods },
         select: {
             id: true,
             tags: true,
@@ -29,4 +30,43 @@ export const getFoodByMood = async (
         console.error("Error in getUserById:", e);
         errorRes(res, 500, "Terjadi kesalahan pada server", e.message);
     }
+};
+
+export const getDetailFood = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const { food } = req.body;
+
+        const foods = toTitleCase(food)
+        const data = await prisma.food.findFirst({
+        where: { name: foods },
+        select: {
+            id: true,
+            tags: true,
+            mood: true,
+            name: true
+        },
+        });
+
+        if (!data) {
+        errorRes(res, 404, "Pengguna tidak ditemukan");
+        return;
+        }
+
+        successRes(res, 200, data, "Data pengguna ditemukan");
+    } catch (e: any) {
+        console.error("Error in getUserById:", e);
+        errorRes(res, 500, "Terjadi kesalahan pada server", e.message);
+    }
+};
+
+const toTitleCase = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };

@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { createServer } from "http";
-// import { Server } from "socket.io";
-import path from 'path';
+import chatRoute from './routes/chat.route';
+import userRoute from './routes/user.route';
 
 dotenv.config();
 
@@ -12,21 +12,12 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// const io = new Server(httpServer, {
-//     cors: {
-//         origin: "*",
-//         methods: ["GET", "POST"]
-//     },
-//     connectionStateRecovery: {}
-// });
-
-// initSocket(io);
-
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-// app.use(express.static(path.join(__dirname, "public")));
+app.use('/chat', chatRoute)
+app.use('/user', userRoute)
 
 httpServer.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);

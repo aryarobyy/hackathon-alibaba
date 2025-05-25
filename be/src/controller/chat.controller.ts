@@ -12,7 +12,7 @@ const openai = new OpenAI({
 });
 
 export const sendMessage = async (req: Request, res: Response):  Promise<void> =>  {
-  const { message, creatorId, mood, recomendation, reason, } = req.body;
+  const { message, creatorId } = req.body;
 
   if (!message) {
     errorRes(res, 400, "Message is required")
@@ -36,13 +36,10 @@ export const sendMessage = async (req: Request, res: Response):  Promise<void> =
 
     const reply = completion.choices[0]?.message?.content || 'No response from AI.';
 
-    const data = {
+    const data : any = {
         message,
         reply,
         creatorId,
-        mood,
-        recomendation,
-        reason,
     }
 
     await prisma.chat.create({
@@ -50,12 +47,13 @@ export const sendMessage = async (req: Request, res: Response):  Promise<void> =
         select: {
             creatorId : true,
             message: true,
-            mood: true,
-            reason: true,
-            recomendation: true,
+            // mood: true,
+            // reason: true,
+            // recomendation: true,
             reply: true,
         }
     })
+    console.log(reply)
 
     successRes(res, 200, data)
   } catch (error) {

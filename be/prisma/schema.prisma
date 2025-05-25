@@ -22,7 +22,7 @@ model Chat {
   message String
   creatorId String @default("not-authored")
   reply String?
-  mood  String
+  mood  String?
   recomendation String?
   reason String?
 
@@ -46,7 +46,7 @@ model Food {
 
 model Mood {
   id                  String @id @default(auto()) @map("_id") @db.ObjectId
-  mood String 
+  mood String? 
   history String[]
-  rekomendasiMakanan String
+  rekomendasiMakanan String?
 }

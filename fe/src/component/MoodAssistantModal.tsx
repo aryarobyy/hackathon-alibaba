@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { ModalStage, MoodAssistantModalProps, MoodResult } from '../utils/Modals';
-import { useGetUser } from '../utils/UseGetUser';
+import { useGetUser } from '../utils/useGetUser';
 import { postChat } from '../provider/chatProvider';
 
 export const MoodAssistantModal: React.FC<MoodAssistantModalProps> = ({ isOpen, onClose }) => {

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { getFoodByMood } from '../provider/foodProvider';
 
 interface FoodRecommendation {
   id: number;
@@ -16,53 +17,26 @@ export default function FoodTile() {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const navigate = useNavigate();
 
-  const fetchRecommendations = async (userInput: string): Promise<FoodRecommendation[]> => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    if (Math.random() < 0.1) {
-      throw new Error('Gagal mendapatkan rekomendasi. Silakan coba lagi.');
-    }
+const fetchRecommendations = async (userInput: string): Promise<FoodRecommendation[]> => {
+  const mood = userInput.toLowerCase();
+  const foods = await getFoodByMood(mood);
 
-    const dummyRecommendations: FoodRecommendation[] = [
-      {
-        id: 1,
-        name: 'Nasi Gudeg',
-        description: 'Makanan tradisional Yogyakarta dengan cita rasa manis dan gurih',
-        reason: 'Makanan comfort food yang bisa menenangkan pikiran'
-      },
-      {
-        id: 2,
-        name: 'Soto Ayam',
-        description: 'Sup ayam hangat dengan bumbu rempah yang kaya',
-        reason: 'Makanan hangat yang cocok untuk menghangatkan hati'
-      },
-      {
-        id: 3,
-        name: 'Es Cendol',
-        description: 'Minuman dingin dengan santan dan gula merah',
-        reason: 'Makanan manis untuk memperbaiki mood'
-      }
-    ];
+  return foods.map((food: any) => ({
+    id: food.id,
+    name: capitalizeEachWord(food.name || ''),
+    description: food.tags?.join(', ') || '',
+    reason: `Rekomendasi berdasarkan suasana hati: ${capitalizeEachWord(food.mood || '')}`
+  }));
+};
 
-    if (userInput.length > 100) {
-      dummyRecommendations.push(
-        {
-          id: 4,
-          name: 'Rendang',
-          description: 'Daging sapi dengan bumbu rempah yang kuat',
-          reason: 'Makanan berenergi untuk semangat baru'
-        },
-        {
-          id: 5,
-          name: 'Bakso',
-          description: 'Sup bakso daging dengan mie dan sayuran',
-          reason: 'Makanan hangat yang mengenyangkan dan menenangkan'
-        }
-      );
-    }
+function capitalizeEachWord(text: string): string {
+  return text
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
 
-    return dummyRecommendations;
-  };
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();

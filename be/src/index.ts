@@ -5,7 +5,7 @@ import chatRoute from './routes/chat.route';
 import userRoute from './routes/user.route';
 // import { insertManyData } from './controller/insert.many';
 import cors from 'cors';
-import { getDetailFood, getFoodByMood } from './controller/food.controller';
+import { getAllFood, getDetailFood, getFoodByMood } from './controller/food.controller';
 import { getRekomenFood } from './controller/mood.controller';
 
 dotenv.config();
@@ -32,6 +32,7 @@ app.use('/chat', chatRoute)
 app.use('/user', userRoute)
 app.get('/food/:mood', getFoodByMood)
 app.post('/food', getDetailFood)
+app.get('/food', getAllFood)
 app.get('/mood/:mood', getRekomenFood)
 
 httpServer.listen(port, () => {

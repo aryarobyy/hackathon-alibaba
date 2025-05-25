@@ -32,6 +32,34 @@ export const getFoodByMood = async (
     }
 };
 
+export const getAllFood = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const data = await prisma.food.findMany({
+      select: {
+        id: true,
+        tags: true,
+        mood: true,
+        name: true,
+        description: true,
+      },
+    });
+
+    if (!data || data.length === 0) {
+      errorRes(res, 404, "Data makanan tidak ditemukan");
+      return;
+    }
+
+    successRes(res, 200, data, "Data makanan ditemukan");
+  } catch (e: any) {
+    console.error("Error in getAllFood:", e);
+    errorRes(res, 500, "Terjadi kesalahan pada server", e.message);
+  }
+};
+
 export const getDetailFood = async (
     req: Request,
     res: Response,

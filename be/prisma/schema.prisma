@@ -43,3 +43,10 @@ model Food {
   availability        String
   priceRange          String
 }
+
+model Mood {
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  mood String 
+  history String[]
+  rekomendasiMakanan String
+}

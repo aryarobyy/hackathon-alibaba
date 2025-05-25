@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../provider/userProvider';
-import { useGetUser } from '../../utils/UseGetUser';
+import { useGetUser } from '../../utils/useGetUser';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');

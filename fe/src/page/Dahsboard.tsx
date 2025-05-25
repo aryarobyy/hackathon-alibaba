@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { MoodAssistantModal } from '../component/MoodAssistantModal';
 import { useIdleTimer } from '../component/UserIdle';
+import { getAllFood } from '../provider/foodProvider';
 
 const Dashboard: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userInteracted, setUserInteracted] = useState(false);
-  const { isIdle, resetTimer } = useIdleTimer(10000);
+  const [foodItems, setFoodItems] = useState<any[]>([]); // Adjust type if known
+
+  const { isIdle, resetTimer } = useIdleTimer(3000);
 
   useEffect(() => {
     if (isIdle && !isModalOpen && userInteracted) {
@@ -13,7 +16,7 @@ const Dashboard: React.FC = () => {
     }
   }, [isIdle, isModalOpen, userInteracted]);
 
-  const handleUserInteraction = React.useCallback(() => {
+  const handleUserInteraction = useCallback(() => {
     if (!userInteracted) {
       setUserInteracted(true);
     }
@@ -31,13 +34,21 @@ const Dashboard: React.FC = () => {
         document.removeEventListener(event, handleUserInteraction);
       });
     };
-  }, [userInteracted, handleUserInteraction]);
+  }, [handleUserInteraction]);
 
-  const foodItems = Array.from({ length: 8 }, (_, i) => ({
-    id: i + 1,
-    name: `Food Item ${i + 1}`,
-    description: 'Delicious meal description...'
-  }));
+  useEffect(() => {
+    const fetchFoods = async () => {
+      try {
+        const data = await getAllFood()
+console.log(data)
+        setFoodItems(data);
+      } catch (e) {
+        console.error('Failed to fetch food items', e);
+      }
+    };
+
+    fetchFoods();
+  }, []);
 
   return (
     <div 

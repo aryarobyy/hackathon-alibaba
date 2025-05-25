@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { getUserById } from '../provider/userProvider';
 
 interface UserData {
   id: string;
